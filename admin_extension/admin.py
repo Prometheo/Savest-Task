@@ -24,9 +24,6 @@ class UserAdmin(admin.ModelAdmin):
 
     def deactivate_user(self, request, user_id,):
         specific_user = User.objects.get(id = user_id)
-        if not specific_user.is_active:
-            self.message_user(request, "{}'s account is already deactivated".format(specific_user.username), level='warning')
-            return redirect('../')
         specific_user.is_active = False
         specific_user.save()
         self.message_user(request, "you've successfully deactivated {}".format(specific_user.username), level='warning')
@@ -34,9 +31,6 @@ class UserAdmin(admin.ModelAdmin):
     
     def activate_user(self, request, user_id):
         specific_user = User.objects.get(id=user_id)
-        if specific_user.is_active:
-            self.message_user(request, "{}'s account is active".format(specific_user.username), level='warning')
-            return redirect('../')
         specific_user.is_active = True
         specific_user.save()
         self.message_user(request, "you've successfully activated {}".format(specific_user.username))
@@ -63,12 +57,19 @@ class UserAdmin(admin.ModelAdmin):
         return custom_urls + urls
 
     def action_buttins(self, obj):
-        return format_html(
-            '<a class="button" href="{}">Deactivate</a>&nbsp;'
-            '<a class="button" href="{}">Activate</a>',
-            reverse('admin:deactivation-button', args=[obj.id]),
+        usr = User.objects.get(id=obj.id)
+        if usr.is_active:
+            return format_html(
+            '<a class="button" href="{}">Deactivate user</a>&nbsp;',
+            reverse('admin:deactivation-button', args=[obj.id])
+        )
+        else:
+            return format_html(
+            '<a class="button" href="{}">Activate user</a>&nbsp;',
             reverse('admin:activation-button', args=[obj.id]),
         )
+            
+
     action_buttins.short_description = 'Admin Actions'
 
 admin.site.unregister(User)
