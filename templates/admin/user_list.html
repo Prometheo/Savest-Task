@@ -1,0 +1,20 @@
+{% extends "admin/change_list.html" %}
+
+{% block object-tools %}
+{% if messages %}
+    <div class="text-primary">
+      {% for message in messages %} {{ message }} {% endfor %}
+    </div>
+    {% endif %}
+    <div>
+        <a href="{% url 'may-paige' %}">
+            <button style="background-color: slateblue;
+                border: thin; border-radius: 5px; width: 100px; height: 30px;
+                ">
+                    Mail Users
+            </button>
+        </a>          
+    </div>
+    <br/>
+    {{ block.super }}
+{% endblock %}
