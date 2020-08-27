@@ -15,9 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.shortcuts import HttpResponse
 from admin_extension.views import admin_mailer
 
+def blnk(request):
+    message = "Nothing to see here, please go to '/admin' to log in"
+    return HttpResponse(message)
+
 urlpatterns = [
-    path('admin/users/mail', admin_mailer, name='may-paige'),
+    path('', blnk),
     path('admin/', admin.site.urls),
+    path('admin/users/mail', admin_mailer, name='may-paige'),
 ]
